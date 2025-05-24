@@ -4,7 +4,6 @@ import pandas as pd
 import pickle
 import matplotlib.pyplot as plt
 
-# Set page config trước
 st.set_page_config(
     page_title="Customer Purchase Prediction",
     page_icon="🔮",
@@ -15,11 +14,8 @@ st.set_page_config(
 st.title("🛒 Customer Purchase Prediction")
 st.markdown("---")
 
-# file_path = 'D:\\Tran Hoang Vu\\Semester 6\\Big Data Analytics\\assigment\\model\\model.pkl'
 file_path = '..\\model\\model.pkl'
 
-
-# model_path = st.sidebar.text_input("Model file path", file_path)
 model_path = file_path
 @st.cache_resource
 def load_model(path):
@@ -33,7 +29,6 @@ model = load_model(model_path)
 if not model:
     st.error("❌ Fail in loading model.")
 
-# File uploader for prediction data
 uploaded_file = st.file_uploader("📂 Upload CSV for Prediction", type="csv")
 
 def draw_pie_chart(df):
@@ -46,9 +41,9 @@ def draw_pie_chart(df):
                labels=counts.index, 
                autopct='%1.1f%%', 
                startangle=90,
-                textprops={'fontsize': 8},   # giảm fontsize xuống 5
-                labeldistance=1.5,           # khoảng cách label so với tâm
-                pctdistance=0.6              # khoảng cách số phần trăm so với tâm               
+                textprops={'fontsize': 8},   
+                labeldistance=1.5,           
+                pctdistance=0.6                          
                 )
         ax.axis('equal')
         st.pyplot(fig)
@@ -62,18 +57,15 @@ if uploaded_file and model:
     st.dataframe(df.head(5))
 
     try:
-        # Predict
         preds = model.predict(df)
         df['predicted_purchase'] = preds
 
-        # Show results
         st.subheader("Prediction Results")
         st.dataframe(df)
 
         draw_pie_chart(df)
         
 
-        # Download button
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button(
             label="📥 Download Predictions",
